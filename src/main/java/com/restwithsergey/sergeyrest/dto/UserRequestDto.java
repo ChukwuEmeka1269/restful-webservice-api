@@ -1,0 +1,11 @@
+package com.restwithsergey.sergeyrest.dto;
+
+import lombok.Data;
+
+@Data
+public class UserRequestDto {
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String password;
+}
