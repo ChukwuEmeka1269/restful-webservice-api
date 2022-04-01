@@ -8,7 +8,7 @@ import java.util.Random;
 @Component
 public class RandomGenerator {
     public final Random RANDOM= new SecureRandom();
-    public final String CHARACTER_STRING = "0123456789!@#$%&*?~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    public final String CHARACTER_STRING = "0123456789@#$%*ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
     public String generateUserId(int length){

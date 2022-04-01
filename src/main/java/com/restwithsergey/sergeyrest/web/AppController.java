@@ -1,11 +1,12 @@
 package com.restwithsergey.sergeyrest.web;
 
-import com.restwithsergey.sergeyrest.Model.UserModel;
 import com.restwithsergey.sergeyrest.dto.UserDto;
 import com.restwithsergey.sergeyrest.dto.UserRequestDto;
 import com.restwithsergey.sergeyrest.dto.UserResponseDto;
 import com.restwithsergey.sergeyrest.service.UserService;
 import org.springframework.beans.BeanUtils;
+
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,13 +15,16 @@ public class AppController {
 
     private final UserService userService;
 
+
     public AppController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
+    @PostMapping(
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public UserResponseDto createUser(@RequestBody UserRequestDto userRequestDto){
-
+        System.out.println("got here");
         UserResponseDto userResponseDto = new UserResponseDto();
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userRequestDto, userDto);
@@ -32,21 +36,16 @@ public class AppController {
         return userResponseDto;
     }
 
-    @GetMapping("/get")
-    public UserModel getUser(String email){
-        UserDto userDto = userService.getUser(email);
+    @GetMapping(path = "/{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public UserResponseDto getUser(@PathVariable String id){
+        UserDto userDto = userService.getUserByUserId(id);
 
-        UserModel userModel = new UserModel();
-        BeanUtils.copyProperties(userDto, userModel);
+        UserResponseDto userResponseDto = new UserResponseDto();
+        BeanUtils.copyProperties(userDto, userResponseDto);
 
-        return userModel;
+        return userResponseDto;
     }
-
-
-//    @GetMapping("/get")
-//    public String getUser(){
-//       return "Get user was called";
-//    }
 
 
 

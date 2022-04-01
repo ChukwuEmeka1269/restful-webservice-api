@@ -5,7 +5,9 @@ import com.restwithsergey.sergeyrest.configuration.util.RandomGenerator;
 import com.restwithsergey.sergeyrest.dto.UserDto;
 import com.restwithsergey.sergeyrest.repository.UserRepository;
 import com.restwithsergey.sergeyrest.service.UserService;
+
 import org.springframework.beans.BeanUtils;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,17 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(storedUser, userDto);
         return userDto;
 
+    }
+
+    @Override
+    public UserDto getUserByUserId(String id) {
+        UserDto userDto = new UserDto();
+        UserModel userModel = userRepository.findByUserId(id);
+
+        if(userModel == null) throw new UsernameNotFoundException("User not found with id "+ id);
+
+        BeanUtils.copyProperties(userModel, userDto);
+
+        return userDto;
     }
 }

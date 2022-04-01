@@ -1,6 +1,7 @@
 package com.restwithsergey.sergeyrest;
 
 import com.restwithsergey.sergeyrest.configuration.util.AppProperties;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,5 +29,6 @@ public class SergeyRestApplication {
 	public AppProperties getAppProperties(){
 		return new AppProperties();
 	}
+
 
 }
