@@ -12,5 +12,15 @@ public interface UserService{
 
     UserDto getUserByUserId(String userId);
 
+    UserDto updateUser(String userId, UserDto userDto);
+
+    UserDto updateEmail(String userId, String newEmail);
+
+    String updatePassword(String email, String newPassword);
+//
+//    String updateFirstname(String email, String oldFirstname, String newFirstname);
+//
+//    String updateLastname(String email, String oldLastname, String newLastname);
+
 
 }
