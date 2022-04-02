@@ -3,6 +3,8 @@ package com.restwithsergey.sergeyrest.service.implementation;
 import com.restwithsergey.sergeyrest.Model.UserModel;
 import com.restwithsergey.sergeyrest.configuration.util.RandomGenerator;
 import com.restwithsergey.sergeyrest.dto.UserDto;
+import com.restwithsergey.sergeyrest.exception.ErrorMessages;
+import com.restwithsergey.sergeyrest.exception.UserServiceException;
 import com.restwithsergey.sergeyrest.repository.UserRepository;
 import com.restwithsergey.sergeyrest.service.UserService;
 
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        if(userRepository.findByEmail(userDto.getEmail()) != null) throw new RuntimeException("User already exist.");
+        if(userRepository.findByEmail(userDto.getEmail()) != null) throw new UserServiceException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
         UserModel userModel = new UserModel();
 
         BeanUtils.copyProperties(userDto, userModel);
