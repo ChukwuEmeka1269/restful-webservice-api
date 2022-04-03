@@ -2,7 +2,7 @@ package com.restwithsergey.sergeyrest.service;
 
 import com.restwithsergey.sergeyrest.dto.UserDto;
 
-
+import java.util.List;
 
 
 public interface UserService{
@@ -17,6 +17,10 @@ public interface UserService{
     UserDto updateEmail(String userId, String newEmail);
 
     String updatePassword(String email, String newPassword);
+
+    void deleteUser(String userId);
+
+    List<UserDto> getUsers(int page, int limit);
 //
 //    String updateFirstname(String email, String oldFirstname, String newFirstname);
 //

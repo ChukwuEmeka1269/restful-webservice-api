@@ -1,9 +1,6 @@
 package com.restwithsergey.sergeyrest.web;
 
-import com.restwithsergey.sergeyrest.dto.UpdateRequest;
-import com.restwithsergey.sergeyrest.dto.UserDto;
-import com.restwithsergey.sergeyrest.dto.UserRequestDto;
-import com.restwithsergey.sergeyrest.dto.UserResponseDto;
+import com.restwithsergey.sergeyrest.dto.*;
 
 
 import com.restwithsergey.sergeyrest.service.UserService;
@@ -12,6 +9,9 @@ import org.springframework.beans.BeanUtils;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -92,8 +92,32 @@ public class AppController {
 
 
 
-    @DeleteMapping("/delete")
-    public String deleteUser(){
-        return "User deleted";
+    @DeleteMapping(path = "/delete/{userId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public OperationStatusModel deleteUser(@PathVariable String userId){
+        OperationStatusModel operationStatus = new OperationStatusModel();
+
+        operationStatus.setOperationName(OperationName.DELETE.name());
+        userService.deleteUser(userId);
+        operationStatus.setOperationStatus(OperationStatus.SUCCESS.name());
+        return operationStatus;
+    }
+
+
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<UserResponseDto> getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+                                          @RequestParam(value = "limit", defaultValue = "25") int limit){
+
+        List<UserResponseDto> responseDtos = new ArrayList<>();
+
+        List<UserDto> users = userService.getUsers(page, limit);
+
+        for(UserDto userDto: users){
+            UserResponseDto userResponseDto = new UserResponseDto();
+            BeanUtils.copyProperties(userDto, userResponseDto);
+            responseDtos.add(userResponseDto);
+        }
+
+        return responseDtos;
     }
 }

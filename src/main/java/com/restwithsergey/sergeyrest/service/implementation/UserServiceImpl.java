@@ -11,9 +11,16 @@ import com.restwithsergey.sergeyrest.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -124,6 +131,32 @@ public class UserServiceImpl implements UserService {
 
         return "Password update successful";
 
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(String userId) {
+        UserModel storedUser = userRepository.findByUserId(userId);
+        if(storedUser == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        userRepository.delete(storedUser);
+    }
+
+    @Override
+    public List<UserDto> getUsers(int page, int limit) {
+        List<UserDto> returnUsers = new ArrayList<>();
+
+        if(page>0) page = page -1;
+
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<UserModel> usersPage = userRepository.findAll(pageable);
+        List<UserModel> pageContent = usersPage.getContent();
+
+        for(UserModel user : pageContent){
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(user, userDto);
+            returnUsers.add(userDto);
+        }
+        return returnUsers;
     }
 
 
